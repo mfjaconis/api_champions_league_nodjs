@@ -1,0 +1,26 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Club {
+  id String  @id @default(uuid())
+  name String @unique
+  players Player[]
+
+  @@map("clubs")
+}
+
+
+model Player{
+  id String  @id @default(uuid())
+  name String 
+  clubId String
+  clubs Club @relation(fields: [clubId], references: [id])
+
+  @@map("players")
+}
