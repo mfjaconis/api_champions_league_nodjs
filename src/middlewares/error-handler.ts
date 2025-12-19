@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { Prisma } from "../../generated/prisma/client";
 
 export const errorHandler = (
   error: Error,
@@ -15,8 +16,15 @@ export const errorHandler = (
     return res.status(400).json({ error: error.message });
   }
 
-  return res.status(500).json({
-    error: "Internal server error",
-    message: process.env.NODE_ENV === "development" ? error.message : undefined,
-  });
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    return res.status(503).json({
+      message: "Database unavailable",
+    });
+  }
+
+  if (error instanceof Error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
 };

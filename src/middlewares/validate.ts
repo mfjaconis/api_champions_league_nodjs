@@ -1,10 +1,31 @@
 import { Request, Response, NextFunction } from "express";
 import { z, ZodError } from "zod";
 
-export const validate = (schema: z.ZodTypeAny) => {
+type ValidationTarget = "body" | "params" | "query";
+
+export const validate = (
+  schema: z.ZodTypeAny,
+  target: ValidationTarget = "body"
+) => {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
-      req.body = schema.parse(req.body);
+      const data =
+        target === "body"
+          ? req.body
+          : target === "params"
+          ? req.params
+          : req.query;
+
+      const validated = schema.parse(data);
+
+      if (target === "body") {
+        req.body = validated;
+      } else if (target === "params") {
+        req.params = validated as typeof req.params;
+      } else {
+        req.query = validated as typeof req.query;
+      }
+
       next();
     } catch (error) {
       if (error instanceof ZodError) {
