@@ -15,12 +15,31 @@ model Club {
   @@map("clubs")
 }
 
+model PlayerStatistics {
+  id        String @id @default(uuid())
+
+  Overall   Int
+  Pace      Int
+  Shooting  Int
+  Passing   Int
+  Dribbling Int
+  Defending Int
+  Physical  Int
+
+  playerId  String @unique
+  player    Player @relation(fields: [playerId], references: [id])
+
+  @@map("statistics")
+}
 
 model Player{
   id String  @id @default(uuid())
   name String 
-  clubId String
-  clubs Club @relation(fields: [clubId], references: [id])
+  nationality String
+  position String
+  statistics PlayerStatistics?
+  clubName String
+  clubs Club @relation(fields: [clubName], references: [name])
 
   @@map("players")
 }

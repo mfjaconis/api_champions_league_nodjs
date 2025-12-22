@@ -78,4 +78,18 @@ export class ClubsController {
       next(error);
     }
   };
+
+  findClubWithPlayersController = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const { id } = req.params;
+      const club = await this.service.findClubWithPlayersService(id);
+      return res.status(200).json(club);
+    } catch (error) {
+      next(error);
+    }
+  };
 }

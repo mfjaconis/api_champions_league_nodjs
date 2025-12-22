@@ -60,4 +60,14 @@ export class ClubsService {
 
     return this.repository.deleteClubRepository(id);
   }
+
+  async findClubWithPlayersService(id: string) {
+    const club = await this.repository.findClubWithPlayersRepository(id);
+
+    if (!club) {
+      throw new Error("Club not found");
+    }
+
+    return club;
+  }
 }

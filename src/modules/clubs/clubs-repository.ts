@@ -20,6 +20,17 @@ export class ClubsRepository {
     return await prisma.club.findMany();
   }
 
+  async findClubWithPlayersRepository(id: string) {
+    return await prisma.club.findMany({
+      where: {
+        id,
+      },
+      include: {
+        players: true,
+      },
+    });
+  }
+
   async findClubByIdRepository(id: string) {
     const clubById = await prisma.club.findUnique({
       where: {

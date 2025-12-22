@@ -15,10 +15,16 @@ clubsRouter.post("/", validate(clubSchema), controller.createClubController);
 
 clubsRouter.get("/", controller.findAllClubsController);
 
+// clubsRouter.get(
+//   "/:id",
+//   validate(clubIdSchema, "params"),
+//   controller.findClubByIdController
+// );
+
 clubsRouter.get(
   "/:id",
   validate(clubIdSchema, "params"),
-  controller.findClubByIdController
+  controller.findClubWithPlayersController
 );
 
 clubsRouter.put(
