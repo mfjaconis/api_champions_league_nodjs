@@ -5,15 +5,9 @@ import { CreateClubDto } from "./dtos/club-dto";
 export class ClubsController {
   constructor(private readonly service: ClubsService) {}
 
-  createClubController = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  createClub = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const club = await this.service.createClubService(
-        req.body as CreateClubDto
-      );
+      const club = await this.service.createClub(req.body as CreateClubDto);
       return res.status(201).json(club);
     } catch (error) {
       next(error);
@@ -26,36 +20,27 @@ export class ClubsController {
     next: NextFunction
   ) => {
     try {
-      const club = await this.service.findAllClubsService();
+      const club = await this.service.findAllClubs();
       return res.status(200).json(club);
     } catch (error) {
       next(error);
     }
   };
 
-  findClubByIdController = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  findClubById = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
-      const clubById = await this.service.findClubByIdService(id);
-
-      return res.status(200).json(clubById);
+      const club = await this.service.findClubById(id);
+      return res.status(200).json(club);
     } catch (error) {
       next(error);
     }
   };
 
-  updateClubController = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  updateClub = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
-      const updatedClub = await this.service.updateClubService(
+      const updatedClub = await this.service.updateClub(
         id,
         req.body as CreateClubDto
       );
@@ -65,29 +50,11 @@ export class ClubsController {
     }
   };
 
-  deleteClubController = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  deleteClub = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
-      await this.service.deleteClubService(id);
+      await this.service.deleteClub(id);
       return res.status(200).json({ message: "Club deleted successfully" });
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  findClubWithPlayersController = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
-    try {
-      const { id } = req.params;
-      const club = await this.service.findClubWithPlayersService(id);
-      return res.status(200).json(club);
     } catch (error) {
       next(error);
     }

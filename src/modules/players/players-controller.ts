@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { CreatePlayerDto } from "./dto/players-dto";
+import { CreatePlayerDto, UpdatePlayerDto } from "./dto/players-dto";
 import { PlayersService } from "./players-service";
 
 export class PlayersController {
@@ -15,6 +15,36 @@ export class PlayersController {
         req.body as CreatePlayerDto
       );
       return res.status(201).json(player);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  findAllPlayersController = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const players = await this.service.findAllPlayers();
+      return res.status(200).json(players);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  updatePlayerController = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const { id } = req.params;
+      const player = await this.service.updatePlayerService(
+        id,
+        req.body as UpdatePlayerDto
+      );
+      return res.status(200).json(player);
     } catch (error) {
       next(error);
     }

@@ -1,4 +1,4 @@
-import { CreatePlayerDto } from "./dto/players-dto";
+import { CreatePlayerDto, UpdatePlayerDto } from "./dto/players-dto";
 import { PlayersRepository } from "./players-respository";
 
 export class PlayersService {
@@ -21,5 +21,21 @@ export class PlayersService {
       ...data,
       club: clubExists.name,
     });
+  }
+
+  async findAllPlayers() {
+    const players = await this.repository.findAllPlayers();
+
+    if (!players || players.length <= 0) {
+      throw new Error("Players not found");
+    }
+
+    return players;
+  }
+
+  async updatePlayerService(id: string, data: UpdatePlayerDto) {
+    console.log("data service", data);
+    console.log("id service", id);
+    return this.repository.updatePlayer(id, data);
   }
 }

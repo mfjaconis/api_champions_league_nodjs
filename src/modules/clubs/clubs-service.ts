@@ -4,8 +4,8 @@ import { CreateClubDto } from "./dtos/club-dto";
 export class ClubsService {
   constructor(private repository: ClubsRepository) {}
 
-  async createClubService(data: CreateClubDto) {
-    const clubExists = await this.repository.findClubNameRepository(data.name);
+  async createClub(data: CreateClubDto) {
+    const clubExists = await this.repository.findClubName(data.name);
 
     if (clubExists) {
       throw new Error("Club already exists");
@@ -14,18 +14,18 @@ export class ClubsService {
     return this.repository.createClubRepository(data);
   }
 
-  async findAllClubsService() {
-    const club = await this.repository.findAllClubsRepository();
+  async findAllClubs() {
+    const club = await this.repository.findAllClubs();
 
     if (!club || club.length <= 0) {
       throw new Error("Club not found");
     }
 
-    return await this.repository.findAllClubsRepository();
+    return club;
   }
 
-  async findClubByIdService(id: string) {
-    const club = await this.repository.findClubByIdRepository(id);
+  async findClubById(id: string) {
+    const club = await this.repository.findClubById(id);
 
     if (!club) {
       throw new Error("Club not found");
@@ -34,10 +34,10 @@ export class ClubsService {
     return club;
   }
 
-  async updateClubService(id: string, data: CreateClubDto) {
-    const club = await this.repository.findClubByIdRepository(id);
-    console.log(club);
-    const clubExists = await this.repository.findClubNameRepository(data.name);
+  async updateClub(id: string, data: CreateClubDto) {
+    const club = await this.repository.findClubById(id);
+
+    const clubExists = await this.repository.findClubName(data.name);
 
     if (clubExists) {
       throw new Error("Club name already exists");
@@ -47,27 +47,17 @@ export class ClubsService {
       throw new Error("Club not found");
     }
 
-    return this.repository.updateClubRepository(id, data);
+    return this.repository.updateClub(id, data);
   }
 
-  async deleteClubService(id: string) {
-    const club = await this.repository.findClubByIdRepository(id);
-    console.log("club", club);
+  async deleteClub(id: string) {
+    const club = await this.repository.findClubById(id);
 
     if (!club) {
       throw new Error("Club not found");
     }
 
-    return this.repository.deleteClubRepository(id);
-  }
-
-  async findClubWithPlayersService(id: string) {
-    const club = await this.repository.findClubWithPlayersRepository(id);
-
-    if (!club) {
-      throw new Error("Club not found");
-    }
-
-    return club;
+    const clubId = club.id;
+    return this.repository.deleteClub(clubId);
   }
 }

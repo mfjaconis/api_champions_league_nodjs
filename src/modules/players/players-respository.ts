@@ -1,5 +1,5 @@
 import { prisma } from "../../lib/prisma";
-import { CreatePlayerDto } from "./dto/players-dto";
+import { CreatePlayerDto, UpdatePlayerDto } from "./dto/players-dto";
 
 export class PlayersRepository {
   async addPlayer(data: CreatePlayerDto) {
@@ -47,6 +47,32 @@ export class PlayersRepository {
           mode: "insensitive",
         },
       },
+    });
+  }
+
+  async findAllPlayers() {
+    return await prisma.player.findMany({
+      include: {
+        clubs: true,
+      },
+    });
+  }
+
+  async findPlayerById(id: string) {
+    return await prisma.player.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        clubs: true,
+      },
+    });
+  }
+
+  async updatePlayer(id: string, data: UpdatePlayerDto) {
+    return await prisma.player.update({
+      where: { id },
+      data,
     });
   }
 }

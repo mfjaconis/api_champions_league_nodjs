@@ -1,4 +1,4 @@
-import z from "zod";
+import { z } from "zod";
 
 const playerStatisticsSchema = z.object({
   Overall: z.number().min(0).max(100),
@@ -30,4 +30,30 @@ export const createPlayerSchema = z.object({
   statistics: playerStatisticsSchema,
 });
 
+export const updatePlayerSchema = z
+  .object({
+    name: z.string().min(3).max(100).optional(),
+
+    clubName: z.string().min(3).max(100).optional(),
+
+    nationality: z.string().min(3).max(15).optional(),
+    position: z.string().min(3).max(15).optional(),
+
+    statistics: playerStatisticsSchema.optional(),
+  })
+  .transform((data) => ({
+    ...data,
+    statistics: data.statistics
+      ? {
+          update: data.statistics,
+        }
+      : undefined,
+  }));
+
+export const playerIdParamSchema = z.object({
+  id: z.uuid("Invalid ID"),
+});
+
 export type CreatePlayerDto = z.infer<typeof createPlayerSchema>;
+export type UpdatePlayerDto = z.infer<typeof updatePlayerSchema>;
+export type PlayerIdParamDto = z.infer<typeof playerIdParamSchema>;

@@ -38,8 +38,8 @@ model Player{
   nationality String
   position String
   statistics PlayerStatistics?
-  clubName String
-  clubs Club @relation(fields: [clubName], references: [name])
+  clubName String?
+  clubs Club? @relation(fields: [clubName], references: [name])
 
   @@map("players")
 }

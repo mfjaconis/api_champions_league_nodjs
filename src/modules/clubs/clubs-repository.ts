@@ -8,7 +8,7 @@ export class ClubsRepository {
     });
   }
 
-  async findClubNameRepository(name: string) {
+  async findClubName(name: string) {
     return await prisma.club.findUnique({
       where: {
         name,
@@ -16,12 +16,12 @@ export class ClubsRepository {
     });
   }
 
-  async findAllClubsRepository() {
+  async findAllClubs() {
     return await prisma.club.findMany();
   }
 
-  async findClubWithPlayersRepository(id: string) {
-    return await prisma.club.findMany({
+  async findClubById(id: string) {
+    return await prisma.club.findUnique({
       where: {
         id,
       },
@@ -31,23 +31,14 @@ export class ClubsRepository {
     });
   }
 
-  async findClubByIdRepository(id: string) {
-    const clubById = await prisma.club.findUnique({
-      where: {
-        id,
-      },
-    });
-    return clubById;
-  }
-
-  async updateClubRepository(id: string, data: CreateClubDto) {
+  async updateClub(id: string, data: CreateClubDto) {
     return prisma.club.update({
       where: { id },
       data,
     });
   }
 
-  async deleteClubRepository(id: string) {
+  async deleteClub(id: string) {
     return prisma.club.delete({
       where: { id },
     });

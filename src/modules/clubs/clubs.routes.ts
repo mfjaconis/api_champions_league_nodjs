@@ -11,33 +11,27 @@ const controller = new ClubsController(service);
 
 const clubsRouter = Router();
 
-clubsRouter.post("/", validate(clubSchema), controller.createClubController);
+clubsRouter.post("/", validate(clubSchema), controller.createClub);
 
 clubsRouter.get("/", controller.findAllClubsController);
-
-// clubsRouter.get(
-//   "/:id",
-//   validate(clubIdSchema, "params"),
-//   controller.findClubByIdController
-// );
 
 clubsRouter.get(
   "/:id",
   validate(clubIdSchema, "params"),
-  controller.findClubWithPlayersController
+  controller.findClubById
 );
 
 clubsRouter.put(
   "/:id",
   validate(clubIdSchema, "params"),
   validate(clubSchema, "body"),
-  controller.updateClubController
+  controller.updateClub
 );
 
 clubsRouter.delete(
   "/:id",
   validate(clubIdSchema, "params"),
-  controller.deleteClubController
+  controller.deleteClub
 );
 
 export default clubsRouter;
