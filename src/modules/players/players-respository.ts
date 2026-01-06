@@ -70,9 +70,42 @@ export class PlayersRepository {
   }
 
   async updatePlayer(id: string, data: UpdatePlayerDto) {
+    const updateData: any = {};
+
+    if (data.name !== undefined) {
+      updateData.name = data.name;
+    }
+    if (data.nationality !== undefined) {
+      updateData.nationality = data.nationality;
+    }
+    if (data.position !== undefined) {
+      updateData.position = data.position;
+    }
+    if (data.clubName !== undefined) {
+      updateData.clubName = data.clubName;
+    }
+
+    if (data.statistics) {
+      updateData.statistics = data.statistics;
+    }
+
     return await prisma.player.update({
       where: { id },
-      data,
+      data: updateData,
+      include: {
+        clubs: true,
+        statistics: true,
+      },
+    });
+  }
+
+  async deletePlayer(id: string) {
+    await prisma.playerStatistics.deleteMany({
+      where: { playerId: id },
+    });
+
+    return await prisma.player.delete({
+      where: { id },
     });
   }
 }

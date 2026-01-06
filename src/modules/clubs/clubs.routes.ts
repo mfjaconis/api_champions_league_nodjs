@@ -3,7 +3,7 @@ import { ClubsController } from "./clubs-controller";
 import { ClubsRepository } from "./clubs-repository";
 import { ClubsService } from "./clubs-service";
 import { validate } from "../../middlewares/validate";
-import { clubSchema, clubIdSchema } from "./dtos/club-dto";
+import { clubSchema, clubIdSchema, updateClubSchema } from "./dtos/club-dto";
 
 const repository = new ClubsRepository();
 const service = new ClubsService(repository);
@@ -24,14 +24,8 @@ clubsRouter.get(
 clubsRouter.put(
   "/:id",
   validate(clubIdSchema, "params"),
-  validate(clubSchema, "body"),
+  validate(updateClubSchema, "body"),
   controller.updateClub
-);
-
-clubsRouter.delete(
-  "/:id",
-  validate(clubIdSchema, "params"),
-  controller.deleteClub
 );
 
 export default clubsRouter;

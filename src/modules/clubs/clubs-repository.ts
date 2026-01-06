@@ -1,5 +1,5 @@
 import { prisma } from "../../lib/prisma";
-import { CreateClubDto } from "./dtos/club-dto";
+import { ClubUpdate, CreateClubDto } from "./dtos/club-dto";
 
 export class ClubsRepository {
   async createClubRepository(data: CreateClubDto) {
@@ -16,8 +16,12 @@ export class ClubsRepository {
     });
   }
 
-  async findAllClubs() {
-    return await prisma.club.findMany();
+  async findAllClubs(skip: number, limit: number) {
+    return await prisma.club.findMany({
+      skip,
+      take: limit,
+      orderBy: { name: "asc" },
+    });
   }
 
   async findClubById(id: string) {
@@ -31,16 +35,10 @@ export class ClubsRepository {
     });
   }
 
-  async updateClub(id: string, data: CreateClubDto) {
+  async updateClub(id: string, data: ClubUpdate) {
     return prisma.club.update({
       where: { id },
       data,
-    });
-  }
-
-  async deleteClub(id: string) {
-    return prisma.club.delete({
-      where: { id },
     });
   }
 }

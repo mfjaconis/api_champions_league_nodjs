@@ -16,7 +16,6 @@ export class PlayersService {
       throw new Error("Player already exists");
     }
 
-    // Usa o nome correto do clube (com o case correto do banco)
     return this.repository.addPlayer({
       ...data,
       club: clubExists.name,
@@ -33,9 +32,51 @@ export class PlayersService {
     return players;
   }
 
+  async findPlayerById(id: string) {
+    const player = await this.repository.findPlayerById(id);
+
+    if (!player) {
+      throw new Error("Player not found");
+    }
+
+    return player;
+  }
+
   async updatePlayerService(id: string, data: UpdatePlayerDto) {
-    console.log("data service", data);
-    console.log("id service", id);
-    return this.repository.updatePlayer(id, data);
+    const player = await this.repository.findPlayerById(id);
+
+    if (!player) {
+      throw new Error("Player not found");
+    }
+
+    const updateData: UpdatePlayerDto = { ...data };
+
+    if (data.clubName) {
+      const clubExists = await this.repository.findClubByName(data.clubName);
+      if (!clubExists) {
+        throw new Error("Club not found");
+      }
+      updateData.clubName = clubExists.name;
+    }
+
+    return this.repository.updatePlayer(id, updateData);
+  }
+
+  async deletePlayerService(id: string) {
+    const player = await this.repository.findPlayerById(id);
+
+    if (!player) {
+      throw new Error("Player not found");
+    }
+
+    await this.repository.deletePlayer(id);
+
+    return {
+      message: "Player deleted successfully",
+      deletedPlayer: {
+        id: player.id,
+        name: player.name,
+      },
+    };
   }
 }

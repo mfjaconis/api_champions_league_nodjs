@@ -10,6 +10,7 @@ datasource db {
 model Club {
   id String  @id @default(uuid())
   name String @unique
+  status Boolean @default(true)
   players Player[]
 
   @@map("clubs")

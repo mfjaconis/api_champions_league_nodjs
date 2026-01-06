@@ -33,6 +33,20 @@ export class PlayersController {
     }
   };
 
+  findPlayerByIdController = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const { id } = req.params;
+      const player = await this.service.findPlayerById(id);
+      return res.status(200).json(player);
+    } catch (error) {
+      next(error);
+    }
+  };
+
   updatePlayerController = async (
     req: Request,
     res: Response,
@@ -44,6 +58,20 @@ export class PlayersController {
         id,
         req.body as UpdatePlayerDto
       );
+      return res.status(200).json(player);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  deletePlayerController = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const { id } = req.params;
+      const player = await this.service.deletePlayerService(id);
       return res.status(200).json(player);
     } catch (error) {
       next(error);

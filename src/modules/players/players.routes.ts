@@ -30,4 +30,16 @@ playersRouter.put(
   controller.updatePlayerController
 );
 
+playersRouter.get(
+  "/:id",
+  validate(playerIdParamSchema, "params"),
+  controller.findPlayerByIdController
+);
+
+playersRouter.delete(
+  "/:id",
+  validate(playerIdParamSchema, "params"),
+  controller.deletePlayerController
+);
+
 export default playersRouter;

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { ClubsService } from "./clubs-service";
-import { CreateClubDto } from "./dtos/club-dto";
+import { ClubUpdate, CreateClubDto } from "./dtos/club-dto";
 
 export class ClubsController {
   constructor(private readonly service: ClubsService) {}
@@ -20,7 +20,9 @@ export class ClubsController {
     next: NextFunction
   ) => {
     try {
-      const club = await this.service.findAllClubs();
+      const page = Number(req.query.page) || 1;
+      const limit = Number(req.query.limit) || 10;
+      const club = await this.service.findAllClubs(page, limit);
       return res.status(200).json(club);
     } catch (error) {
       next(error);
@@ -42,19 +44,9 @@ export class ClubsController {
       const { id } = req.params;
       const updatedClub = await this.service.updateClub(
         id,
-        req.body as CreateClubDto
+        req.body as ClubUpdate
       );
       return res.status(200).json(updatedClub);
-    } catch (error) {
-      next(error);
-    }
-  };
-
-  deleteClub = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { id } = req.params;
-      await this.service.deleteClub(id);
-      return res.status(200).json({ message: "Club deleted successfully" });
     } catch (error) {
       next(error);
     }
